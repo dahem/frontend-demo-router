@@ -1,25 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from '@material-ui/styles';
+import ChooseThemeProvider, { ThemeContext } from 'store/contexts/theme';
+
+import store from './store';
+import Routes from './routes';
+import darkTheme from './theme/dark';
+import lightTheme from './theme/light';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChooseThemeProvider>
+      <ThemeContext.Consumer>
+        {(consumer) => (
+          <ThemeProvider theme={consumer.theme === 'dark' ? darkTheme : lightTheme}>
+            <Provider store={store}>
+              <div>
+                <Routes />
+              </div>
+            </Provider>
+          </ThemeProvider>
+        )}
+
+      </ThemeContext.Consumer>
+    </ChooseThemeProvider>
   );
 }
 
